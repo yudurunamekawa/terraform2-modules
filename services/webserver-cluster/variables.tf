@@ -38,3 +38,13 @@ variable "custom_tags" {
   type    = map(string)
   default = {}
 }
+
+variable "enable_autoscaling" {
+  type    = bool
+  default = true
+}
+
+variable "enable_autoscaling_schedule" {
+  type    = bool
+  default = false
+}

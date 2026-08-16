@@ -313,3 +313,28 @@ resource "aws_autoscaling_group" "example" {
     aws_lb_target_group.tg
   ]
 }
+
+############################################
+# Auto Scaling Schedule
+############################################
+resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
+  count = var.enable_autoscaling_schedule ? 1 : 0
+
+  scheduled_action_name  = "${var.cluster_name}-scale-out-during-business-hours"
+  min_size               = 2
+  max_size               = 3
+  desired_capacity       = 3
+  recurrence             = "0 9 * * *"
+  autoscaling_group_name = aws_autoscaling_group.example.name
+}
+
+resource "aws_autoscaling_schedule" "scale_in_at_night" {
+  count = var.enable_autoscaling_schedule ? 1 : 0
+
+  scheduled_action_name  = "${var.cluster_name}-scale-in-after-business-hours"
+  min_size               = 2
+  max_size               = 3
+  desired_capacity       = 2
+  recurrence             = "0 17 * * *"
+  autoscaling_group_name = aws_autoscaling_group.example.name
+}
